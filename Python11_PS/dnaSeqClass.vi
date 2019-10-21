@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+class DNARecord(object):
+
+	def __init__(self, sequence, gene_name, species_name):
+		self.sequence = sequence
+		self.gene_name = gene_name
+		self.species_name = species_name
+
+	def seq_len(self):
+		return len(self.sequence)
+
+	def seq_comp(self):
+		#Counting nucleotides in sequence using the following order: ACTG - results assigned to a dictionary nt:value
+		intake = self.upper()
+		counter = {}
+		for nt in 'ACTG':
+			counter[nt] = intake.count(nt)
+		return counter 
+		
+	def gc_content(self):
+		temp = DNARecord.seq_comp(self)
+		return (temp['G'] + temp['C'])/(temp['G'] + temp['C'] + temp['A'] + temp['T'])
+
+	def fasta_format(self):
+		fasta_file = ''
+		fasta_file = fasta_file+'>'+self.gene_name+'\n'+self.sequence+'\n'
+		return fasta_file
+
+dna1 = DNARecord('ACTGAATTGGAACATGA', 'Club', 'Icelandia cavemania')
+
+print('Gene name: {}\t Species: {}\t Sequence: {}'.format(dna1.gene_name, dna1.species_name, dna1.sequence))
+print('The sequence length is {} nucleotides'.format(dna1.seq_len()))
+seqcount = DNARecord.seq_comp(dna1.sequence)
+for nt in seqcount:
+	print('There are {} {}\'s'.format(seqcount[nt],nt))
+gcOut = DNARecord.gc_content(dna1.sequence)
+print('The GC content is:', '{:.2%}'.format(gcOut))
+
+print(dna1.fasta_format())
